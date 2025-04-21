@@ -1,4 +1,4 @@
-module web3
+module github.com/b1nd2333/web3
 
 go 1.24.1
 
