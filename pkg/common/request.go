@@ -10,9 +10,16 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"time"
 )
+
+func NewClientWithJar(jar *cookiejar.Jar, proxyStr string) *http.Client {
+	client, _ := NewHTTPClientWithProxy(proxyStr)
+	client.Jar = jar
+	return client
+}
 
 // NewHTTPClientWithProxy 根据代理创建client
 func NewHTTPClientWithProxy(proxyAddress string) (*http.Client, error) {
