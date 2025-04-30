@@ -45,7 +45,7 @@ func getCsrfCode(proxyStr string, uri string, xToken string) (string, error) {
 	}
 
 	client, _ := common.NewHTTPClientWithProxy(proxyStr)
-
+	defer client.CloseIdleConnections()
 	req.Header.Set("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36")
 	req.Header.Set("Cookie", fmt.Sprintf("auth_token=%s", xToken))
@@ -103,6 +103,7 @@ func getXAuthCode(proxyStr string, uri string, xToken string, csrfToken string) 
 	req.Header.Set("Cookie", fmt.Sprintf("auth_token=%s;ct0=%s", xToken, csrfToken))
 
 	client, _ := common.NewHTTPClientWithProxy(proxyStr)
+	defer client.CloseIdleConnections()
 
 	// 发送请求
 	resp, err := client.Do(req)
@@ -145,6 +146,7 @@ func authorize(proxyStr string, uri string, xToken string, code string, csrfToke
 	}
 
 	client, _ := common.NewHTTPClientWithProxy(proxyStr)
+	defer client.CloseIdleConnections()
 
 	req.Header.Set("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36")

@@ -50,6 +50,8 @@ func ByPassCFCaptcha(proxyStr, userToken, href, siteKey, action string, explicit
 		return "", err
 	}
 
+	defer client.CloseIdleConnections()
+
 	cfCaptchaModel := &CFCaptchaStruct{}
 	cfCaptchaModel.Href = href
 	cfCaptchaModel.SiteKey = siteKey

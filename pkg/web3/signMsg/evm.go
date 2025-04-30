@@ -1,4 +1,4 @@
-package web3
+package signMsg
 
 import (
 	"crypto/ecdsa"
@@ -15,8 +15,8 @@ type SignableMessage struct {
 	Body    []byte
 }
 
-// SignMessage	消息签名
-func SignMessage(msg string, privateKeyHex string) (string, error) {
+// EvmMsgSign	EVM消息签名
+func EvmMsgSign(msg string, privateKeyHex string) (string, error) {
 	// 设置签名请求数据
 	signableMessage := EncodeDefunct([]byte(msg))
 	messageHash := hashEIP191Message(*signableMessage)

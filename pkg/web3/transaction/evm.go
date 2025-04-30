@@ -1,4 +1,4 @@
-package web3
+package transaction
 
 import (
 	"context"
@@ -35,14 +35,16 @@ func EstimateGasLimit(client *ethclient.Client, from common.Address, to common.A
 	return buffered, nil
 }
 
-// Transaction 交易
-func Transaction(rpcUri, publicKeyHex, toAddressHex, privateKeyHex, data string, value int64) error {
+// EvmTransaction EVM交易
+func EvmTransaction(rpcUri, publicKeyHex, toAddressHex, privateKeyHex, data string, value int64) error {
 	// 连接rpc
 	client, err := ethclient.Dial(rpcUri)
 	if err != nil {
 		color.Red("连接rpc失败:%s", err)
 		return err
 	}
+
+	defer client.Close()
 
 	// 获取chainID
 	chainID, err := client.ChainID(context.Background())
