@@ -151,7 +151,7 @@ func authorize(proxyStr string, uri string, xToken string, code string, csrfToke
 	req.Header.Set("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.112 Safari/537.36")
 	req.Header.Set("X-Csrf-Token", csrfToken)
-	req.Header.Set("Cookie", fmt.Sprintf("https://bytenova.ai/;auth_token=%s;ct0=%s", xToken, csrfToken))
+	req.Header.Set("Cookie", fmt.Sprintf("auth_token=%s;ct0=%s", xToken, csrfToken))
 	req.Header.Set("Referer", uri)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	// 发送请求
