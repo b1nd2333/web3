@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/b1nd2333/web3/pkg/common"
 	"io"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -95,4 +96,53 @@ func ByPassCFCaptcha(proxyStr, userToken, href, siteKey, action string, explicit
 	}
 
 	return cfCaptchaRespModel.Data.Token, nil
+}
+
+type ScraperRequest struct {
+	URL     string `json:"url"`
+	SiteKey string `json:"siteKey"`
+	Mode    string `json:"mode"`
+}
+
+type ScraperResponse struct {
+	CaptchaToken string `json:"captchaToken"` // 有时是 token，有时是 captchaToken
+	Token        string `json:"token"`
+	Headers      struct {
+		UserAgent string `json:"user-agent"`
+	} `json:"headers"`
+	Cookies []struct {
+		Name  string `json:"name"`
+		Value string `json:"value"`
+	} `json:"cookies"`
+}
+
+func GetTurnstileToken(uri string, siteKey string, mode string, dockerUri string) (*ScraperResponse, error) {
+	// turnstile-min
+	reqBody := ScraperRequest{
+		URL:     uri,
+		SiteKey: siteKey,
+		Mode:    mode,
+	}
+
+	bodyBytes, _ := json.Marshal(reqBody)
+	req, err := http.NewRequest("POST", dockerUri, bytes.NewBuffer(bodyBytes))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	client := http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	data, _ := ioutil.ReadAll(resp.Body)
+
+	var scraperResp ScraperResponse
+	if err := json.Unmarshal(data, &scraperResp); err != nil {
+		return nil, err
+	}
+	return &scraperResp, nil
 }
